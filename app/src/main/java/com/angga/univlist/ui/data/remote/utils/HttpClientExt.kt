@@ -23,6 +23,7 @@ suspend inline fun <reified  Response: Any> HttpClient.get(
     return safeCall {
         get {
             url(constructRoute(route))
+            println("==== url "+constructRoute(route))
             queryParameters.forEach { (key, value) ->
                 parameter(key, value)
             }
