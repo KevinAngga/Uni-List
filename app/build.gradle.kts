@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.junit5)
 }
 
 android {
@@ -35,6 +36,10 @@ android {
         kotlinCompilerExtensionVersion = "1.5.13"
     }
 
+    tasks.withType<Test> {
+        useJUnitPlatform()
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -50,6 +55,7 @@ android {
 dependencies {
 
     implementation(libs.androidx.core.ktx)
+    implementation(libs.kotlinx.coroutines.core)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
@@ -69,11 +75,11 @@ dependencies {
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.hilt.compose)
+    implementation(libs.core.ktx)
     ksp(libs.dagger.hilt.compiler)
 
     //ktor
     implementation(libs.bundles.ktor)
-
 
     //room
     implementation(libs.room)
@@ -92,7 +98,25 @@ dependencies {
     //timber
     implementation(libs.timber)
 
+    //retrofit
+    implementation(libs.retrofit.serialization.converter)
+    implementation(libs.retrofit)
+
+    implementation(libs.okhttp)
+
+
     testImplementation(libs.junit)
+    testImplementation(libs.junit5.api)
+    testImplementation(libs.room.testing)
+    testImplementation(libs.paging.common)
+    testImplementation(libs.junit5.params)
+    testRuntimeOnly(libs.junit5.engine)
+    testImplementation(libs.assertk)
+    testImplementation(libs.mockito)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.turbine)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.ktor.client.mock)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

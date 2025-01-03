@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.angga.univlist.ui.domain.repository.UniversityRepository
+import com.angga.univlist.domain.repository.UniversityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -30,7 +30,9 @@ class UniversityViewModel @Inject constructor(
                 state = state.copy(
                     searchValue = action.text,
                 )
-                filterUniversities(action.text.trim())
+                if (state.searchValue.isNotEmpty()) {
+                    filterUniversities(action.text.trim())
+                }
             }
             else -> {}
         }

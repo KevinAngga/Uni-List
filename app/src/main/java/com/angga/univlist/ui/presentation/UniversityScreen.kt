@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -53,7 +55,7 @@ private fun UniversityScreen(
 ) {
     Scaffold {
         val result = state.universityList.collectAsLazyPagingItems()
-        val loadState = result.loadState
+        val loadState = result.loadState.mediator
         val context : Context = LocalContext.current
         val focusRequester = remember { FocusRequester() }
 
@@ -73,20 +75,11 @@ private fun UniversityScreen(
                         text = "Input University Name",
                     )
                 },
-                colors = TextFieldDefaults.colors(
-                    disabledContainerColor = Color.Transparent,
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent,
-                    disabledIndicatorColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                ),
-                textStyle = MaterialTheme.typography.labelLarge,
+                textStyle = MaterialTheme.typography.bodyMedium,
             )
 
             LazyColumn(
                 modifier = Modifier
-                    .systemBarsPadding()
                     .fillMaxSize()
                     .padding(8.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -110,13 +103,13 @@ private fun UniversityScreen(
 
                 result.apply {
                     when {
-                        loadState.append is LoadState.Loading -> {
+                        loadState?.append is LoadState.Loading -> {
                             item {
                                 Text("loading")
                             }
                         }
 
-                        loadState.refresh is LoadState.Loading -> {
+                        loadState?.refresh is LoadState.Loading -> {
                             item {
                                 Box(
                                     modifier = Modifier.fillParentMaxSize()
@@ -126,27 +119,14 @@ private fun UniversityScreen(
                             }
                         }
 
-                        loadState.refresh is LoadState.Error -> {
+                        loadState?.refresh is LoadState.Error -> {
                             val error = loadState.refresh as LoadState.Error
                             item {
-                                error.error.localizedMessage?.let {
+                                error.error.localizedMessage?.let { error ->
                                     ErrorMessage(
                                         modifier = Modifier.fillParentMaxSize(),
-                                        message = it,
-                                        onClickRetry = { retry() })
-                                }
-                            }
-                        }
-
-
-                        loadState.append is LoadState.Error -> {
-                            val error = loadState.append as LoadState.Error
-                            item {
-                                error.error.localizedMessage?.let {
-                                    ErrorMessage(
-                                        modifier = Modifier.fillParentMaxSize(),
-                                        message = it,
-                                        onClickRetry = {  })
+                                        message = error,
+                                        onClickRetry = { retry() } )
                                 }
                             }
                         }
@@ -163,19 +143,26 @@ fun ErrorMessage(
     modifier: Modifier = Modifier,
     onClickRetry: () -> Unit,
 ) {
-    Row(
+    Column (
         modifier = modifier.padding(10.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = message,
             color = MaterialTheme.colorScheme.error,
-            modifier = Modifier.weight(1f),
         )
 
-        OutlinedButton(onClick = onClickRetry) {
-            Text(text = "retry")
+        Spacer(modifier = Modifier.height(20.dp))
+
+        OutlinedButton(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = onClickRetry
+        ) {
+            Text(
+                text = "retry",
+                style = MaterialTheme.typography.bodySmall,
+            )
         }
     }
 }
