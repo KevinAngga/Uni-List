@@ -1,4 +1,4 @@
-package com.angga.univlist.ui.domain.utils
+package com.angga.univlist.domain.utils
 
 interface DataError : Error {
     enum class Network : DataError {

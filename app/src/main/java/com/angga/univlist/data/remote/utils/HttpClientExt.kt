@@ -1,7 +1,7 @@
-package com.angga.univlist.ui.data.remote.utils
+package com.angga.univlist.data.remote.utils
 
-import com.angga.univlist.ui.data.BASE_URL
-import com.angga.univlist.ui.domain.utils.DataError
+import com.angga.univlist.data.BASE_URL
+import com.angga.univlist.domain.utils.DataError
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.delete
@@ -13,7 +13,7 @@ import io.ktor.client.request.url
 import io.ktor.client.statement.HttpResponse
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.serialization.SerializationException
-import com.angga.univlist.ui.domain.utils.Result
+import com.angga.univlist.domain.utils.Result
 import kotlin.coroutines.cancellation.CancellationException
 
 suspend inline fun <reified  Response: Any> HttpClient.get(
